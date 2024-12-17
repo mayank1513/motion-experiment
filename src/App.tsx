@@ -1,10 +1,15 @@
 import "./index.css";
-import { useState } from "react";
-import { motion } from "motion/react";
+import { useEffect, useState } from "react";
+import { motion, useAnimate } from "motion/react";
 
 export default function App() {
   const offset = 1;
   const [colorHex, setColorHex] = useState("#f00");
+  const [scope, animate] = useAnimate<HTMLDivElement>();
+
+  useEffect(() => {
+    animate(scope.current, { scale: [1, 2, 1] });
+  }, [animate, colorHex, scope]);
 
   return (
     <>
@@ -14,7 +19,7 @@ export default function App() {
         onChange={(e) => setColorHex(e.target.value)}
       />
       <motion.div
-        key={colorHex}
+        ref={scope}
         transition={{ duration: 0.3, delay: offset * 0.1, ease: "easeOut" }}
         animate={{
           backgroundColor: colorHex,
